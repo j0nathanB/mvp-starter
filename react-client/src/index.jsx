@@ -16,29 +16,20 @@ class App extends React.Component {
     $.ajax({
       url: '/records', 
       success: (data) => {
-        var display = JSON.parse(data);
-        console.log(display);
+        let record = JSON.parse(data);
+        let apiKey = "&key=AIzaSyAWh923QwLcLQGjH1w4OYOG0_CX8jGHbmE";
+        let photoReference = record[0].photo_reference;
+        let photoQuery = 'https://maps.googleapis.com/maps/api/place/photo?maxheight=500&photoreference=';
+
         this.setState({
-          items: display
-        })
+          items: record,
+          photo: photoQuery + photoReference + apiKey
+        });
       },
       error: (err) => {
         console.log('err', err);
       }
     });
-
-    $.ajax({
-      url: '/location',
-      success: (data) => {
-        let queryResult = JSON.parse(data);
-        let photo_reference = queryResult.results[0].photos[0].photo_reference;
-        let apiKey = "&key=AIzaSyAWh923QwLcLQGjH1w4OYOG0_CX8jGHbmE";
-
-        this.setState({
-          photo: 'https://maps.googleapis.com/maps/api/place/photo?maxheight=500&photoreference=' + photo_reference + apiKey
-        })
-      }
-    }); 
   }
 
   render () {

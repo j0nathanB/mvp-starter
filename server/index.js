@@ -51,12 +51,9 @@ app.get('/items', function (req, res) {
 });
 
 app.get('/records', function (req, res) {
-  Report.findRandom(null, null, {limit:1}, function (err, data) {
-      console.log(data);    
-      res.end();
-    });
-
-      
+  Report.findRandom(null, null, {limit:1}, function (err, data) { 
+      res.end(JSON.stringify(data));
+    });     
   //Report.remove({}, function() {res.end("All records deleted")});
 
 });

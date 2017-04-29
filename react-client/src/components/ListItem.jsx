@@ -2,7 +2,9 @@ import React from 'react';
 
 const ListItem = (props) => (
   <div>
-    <h4>{ props.item.town }, {props.item.country}</h4>
+    <h2><pre>{ props.item.town }, {props.item.country}</pre></h2>
+    <h3><pre>Total number of strikes: {props.item.number}</pre></h3>
+    <h3><pre>Total number of casualties: {props.item.deaths}</pre></h3>
   </div>
 )
 
