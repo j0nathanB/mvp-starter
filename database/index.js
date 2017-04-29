@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var random = require('mongoose-random');
 mongoose.connect('mongodb://localhost/test');
 
 var db = mongoose.connection;
@@ -12,16 +13,17 @@ db.once('open', function() {
 });
 
 var reportSchema = mongoose.Schema({
-  number: Number,
+  number: String,
+  date: String,
   country: String,
   location: String,
   town: String,
   injuries: String,
   deaths: String,
-  lat: String,
-  lon: String,
-  bureau_id: String
+  photo_reference: String
 });
+
+reportSchema.plugin(random, { path: 'r' }); // by default `path` is `random`. It's used internally to store a random value on each doc. 
 
 var Report = mongoose.model('Report', reportSchema);
 

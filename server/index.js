@@ -9,54 +9,62 @@ var app = express();
 app.use(express.static(__dirname + '/../react-client/dist'));
 
 app.get('/items', function (req, res) {
+  let droneApiUrl = 'http://api.dronestre.am/data'; 
+  let placesApiUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="; 
+  let placesApiKey = "AIzaSyAWh923QwLcLQGjH1w4OYOG0_CX8jGHbmE";
 
   // Request JSON feed
-  let url = 'http://api.dronestre.am/data'; 
-  let rawData; 
-  let strikes;
+  request(droneApiUrl, function (err, resp, data) { 
+    let rawData = JSON.parse(data);
+    let strikes = rawData.strike;
 
-  request(url, function (err, resp, body) { 
-
-    rawData = JSON.parse(body);
-    strikes = rawData.strike;
-    
     strikes.forEach( strike => {
-      let record = new Report ({
-        number: strike.number,
-        country: strike.country,
-        location: strike.location,
-        town: strike.town,
-        injuries: strike.injuries,
-        deaths: strike.deaths,
-        lat: strike.lat,
-        lon: strike.lon,
-        bureau_id: strike.bureau_id
-      });
-      record.save();
-     } 
-    );
+      let placesQuery = strike.town + "," + strike.country;
+      
+      // Request Places photo_reference
+      request (placesApiUrl + placesQuery + "&key=" + placesApiKey, function (err, rsp, results) {
+        let searchResults = JSON.parse(results);
+        
+        if(searchResults.status === 'OK' && searchResults.results[0].photos) {
+          let photoReference = searchResults.results[0].photos[0].photo_reference;
 
-    console.log("Records saved.");
+          let record = new Report ({
+            number: strike.number,
+            date: strike.date,
+            country: strike.country,
+            location: strike.location,
+            town: strike.town,
+            injuries: strike.injuries,
+            deaths: strike.deaths,
+            photo_reference: photoReference
+          });
+          
+          record.save();
+        }
+      });
+     });
+
+    console.log("Records queried.");
+  
     res.end()
   });
 });
 
 app.get('/records', function (req, res) {
-  Report.find().distinct('town', function (err, data) {
-    if (err) {
-        return "ERROR";
-      return;
-    } else {
-      res.writeHead(200);
-      res.end(JSON.stringify(data));
-    } 
-  });
+  Report.findRandom(null, null, {limit:1}, function (err, data) {
+      console.log(data);    
+      res.end();
+    });
+
+      
+  //Report.remove({}, function() {res.end("All records deleted")});
+
 });
 
 app.get('/location', function (req, res) {
   let testQuery = "Makeen,Pakistan";
   let apiKey = "AIzaSyAWh923QwLcLQGjH1w4OYOG0_CX8jGHbmE";
-  let searchURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + testQuery + "&key=" +apiKey;
+  let searchURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + testQuery + "&key=" + apiKey;
 
   request(searchURL, function (err, resp, body) {
     res.end(body);
