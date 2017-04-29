@@ -25,16 +25,4 @@ var reportSchema = mongoose.Schema({
 
 var Report = mongoose.model('Report', reportSchema);
 
-// var selectAll = function(callback) {
-//   Report.find({}, function(err, reports) {
-//     if(err) {
-//       callback(err, null);
-//     } else {
-//       callback(null, reports);
-//     }
-//   });
-// };
-
-module.exports = Report
-
-//module.exports.selectAll = selectAll;
+module.exports = Report;

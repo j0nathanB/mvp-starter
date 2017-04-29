@@ -11,14 +11,12 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 app.get('/items', function (req, res) {
 
   // Request JSON feed
-  var url = 'http://api.dronestre.am/data'; 
-  var rawData; 
-  var strikes;
+  let url = 'http://api.dronestre.am/data'; 
+  let rawData; 
+  let strikes;
 
   request(url, function (err, resp, body) { 
-    //console.log('error:', err); // Print the error if one occurred 
-    //console.log('statusCode:', resp && resp.statusCode); // Print the response status code if a response was received 
-    //console.log('body:', typeof JSON.parse(body)); 
+
     rawData = JSON.parse(body);
     strikes = rawData.strike;
     
@@ -38,18 +36,31 @@ app.get('/items', function (req, res) {
      } 
     );
 
-    console.log("Records saved!");
-
+    console.log("Records saved.");
+    res.end()
   });
+});
 
-  // items.selectAll(function(err, data) {
-  //   if(err) {
-  //     res.sendStatus(500);
-  //   } else {
-  //     res.json(data);
-  //     res.end();
-  //   }
-  // });
+app.get('/records', function (req, res) {
+  Report.find().distinct('town', function (err, data) {
+    if (err) {
+        return "ERROR";
+      return;
+    } else {
+      res.writeHead(200);
+      res.end(JSON.stringify(data));
+    } 
+  });
+});
+
+app.get('/location', function (req, res) {
+  let testQuery = "Makeen,Pakistan";
+  let apiKey = "AIzaSyAWh923QwLcLQGjH1w4OYOG0_CX8jGHbmE";
+  let searchURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + testQuery + "&key=" +apiKey;
+
+  request(searchURL, function (err, resp, body) {
+    res.end(body);
+  });
 });
 
 app.listen(3000, function() {
