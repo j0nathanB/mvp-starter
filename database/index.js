@@ -13,11 +13,10 @@ db.once('open', function() {
 });
 
 var reportSchema = mongoose.Schema({
-  number: String,
   date: String,
   country: String,
   location: String,
-  town: String,
+  town: {type: String, unique: true, dropDups: true}, 
   injuries: String,
   deaths: String,
   photo_reference: String

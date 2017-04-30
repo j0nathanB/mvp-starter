@@ -18,13 +18,9 @@ class App extends React.Component {
       url: '/records', 
       success: (data) => {
         let record = JSON.parse(data);
-        let apiKey = "&key=AIzaSyAWh923QwLcLQGjH1w4OYOG0_CX8jGHbmE";
-        let photoReference = record[0].photo_reference;
-        let photoQuery = 'https://maps.googleapis.com/maps/api/place/photo?maxheight=500&photoreference=';
-
+      
         this.setState({
           items: record,
-          photo: photoQuery + photoReference + apiKey
         });
       },
       error: (err) => {
@@ -38,13 +34,9 @@ class App extends React.Component {
       url: '/records', 
       success: function (data) {
         let record = JSON.parse(data);
-        let apiKey = "&key=AIzaSyAWh923QwLcLQGjH1w4OYOG0_CX8jGHbmE";
-        let photoReference = record[0].photo_reference;
-        let photoQuery = 'https://maps.googleapis.com/maps/api/place/photo?maxheight=500&photoreference=';
 
         this.setState({
           items: record,
-          photo: photoQuery + photoReference + apiKey
         });
       }.bind(this),
       error: (err) => {
@@ -55,9 +47,8 @@ class App extends React.Component {
 
   render () {
     return (<div>
-      <h1><pre>Places</pre></h1>
-      <img src={this.state.photo} onClick={this.handleClick}/>
       <List items={this.state.items}/>
+      <a><h3 onClick={this.handleClick}>Next</h3></a>
     </div>)
   }
 }

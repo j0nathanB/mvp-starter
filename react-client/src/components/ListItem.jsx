@@ -1,10 +1,14 @@
 import React from 'react';
 
 const ListItem = (props) => (
-   <div>
-    <h2><pre>{ props.item.town }, { props.item.location }, {props.item.country}</pre></h2>
-    <h3><pre>Total number of drone strikes: {props.item.number}</pre></h3>
-    <h3><pre>Total number of casualties: {props.item.deaths}</pre></h3>
+   <div class="row justify-content-center">
+    <div class="column">
+      <h2>A scene from { props.item.town }, {props.item.country}</h2>
+      <img src={"https://maps.googleapis.com/maps/api/place/photo?maxheight=500&photoreference=" + props.item.photo_reference + "&key=AIzaSyAWh923QwLcLQGjH1w4OYOG0_CX8jGHbmE"} />
+      <h3>A US drone strike occurred around here</h3>
+      <h3>on {props.item.date}</h3>
+      <h3>and killed {props.item.deaths} people</h3>
+    </div>
   </div>
 )
 
