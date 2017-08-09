@@ -12,7 +12,7 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 app.get('/items', function (req, res) {
   let droneApiUrl = 'http://api.dronestre.am/data'; 
   let placesApiUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="; 
-  let placesApiKey = "AIzaSyAWh923QwLcLQGjH1w4OYOG0_CX8jGHbmE";
+  let placesApiKey = "";
 
   // Request JSON feed
   request(droneApiUrl, function (err, resp, data) { 
